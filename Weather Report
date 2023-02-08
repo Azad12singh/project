@@ -1,0 +1,167 @@
+package Java10Projects;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.*;
+import java.util.Scanner;
+import java.util.Stack;
+
+public class WeatherReport {
+    static JFrame fr=new JFrame("Weather Report");
+    static JLabel jl,jl1,jl2,jl3,jl4,jl5,jl6;
+    static JTextField jtf,jtf1,jtf2;
+    static JButton bt;
+    static String city,st;
+    static String state;
+    static double lat;
+    static double lon,tc;
+
+    static Font font,font1;
+
+    public static void main(String[] args) {
+
+        try{
+
+            //frame start;
+
+            font= new Font("serif",Font.BOLD,(18));
+            fr.setSize(400,500);
+            fr.getContentPane().setBackground(Color.lightGray);
+            fr.setLayout(null);
+            fr.setVisible(true);
+
+            jl= new JLabel("Find Any city Current Weather Report");
+            jl.setBounds(30,20,400,40);
+            jl.setFont(font);
+            fr.add(jl);
+
+            font1=new Font("Arail",Font.PLAIN,(15));
+            jl1=new JLabel("Enter City Name");
+            jl1.setBounds(30,80,250,30);
+            jl1.setFont(font1);
+            fr.add(jl1);
+
+            jtf=new JTextField();
+            jtf.setBounds(160,80,150,30);
+            //jtf.setBorder(null);
+            fr.add(jtf);
+
+            jl2=new JLabel("Enter State Name");
+            jl2.setBounds(30,120,250,30);
+            jl2.setFont(font1);
+            fr.add(jl2);
+
+            jtf1=new JTextField(15);
+            jtf1.setBounds(160,120,150,30);
+            jtf1.setBorder(null);
+            fr.add(jtf1);
+
+            bt=new JButton("Submit");
+            bt.setBounds(130,170,100,30);
+            bt.setFont(font);
+            fr.add(bt);
+
+            jl3=new JLabel();
+            jl3.setBounds(60,220,250,40);
+            jl3.setFont(font);
+            fr.add(jl3);
+
+            jl4=new JLabel();
+            jl4.setBounds(60,250,250,40);
+            jl4.setFont(font);
+            fr.add(jl4);
+
+            jl5=new JLabel();
+            jl5.setBounds(60,280,250,40);
+            jl5.setFont(font);
+            fr.add(jl5);
+
+            jl6=new JLabel();
+            jl6.setBounds(60,310,250,40);
+            jl6.setFont(font);
+            fr.add(jl6);
+
+bt.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        try {
+            city = jtf.getText();
+            state = jtf1.getText();
+            URL url = new URL("http://api.openweathermap.org/geo/1.0/direct?" +
+                    "q=" + city + "," + state + ",91&limit=2&appid=a3a5be223dc24b42d501dfddc0229cd0");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.setRequestMethod("GET");
+            InputStreamReader isr = new InputStreamReader(con.getInputStream());
+            BufferedReader bf = new BufferedReader(isr);
+
+            st = bf.readLine();
+
+            JSONParser par = new JSONParser();
+            JSONArray array = (JSONArray) par.parse(st);
+            JSONObject obj = (JSONObject) array.get(0);
+
+            lat = (double) obj.get("lat");
+            //System.out.println(lat);
+            lon = (double) obj.get("lon");
+
+            //now we find weather report;
+            String ss = "";
+
+
+            URL url1 = new URL("https://api.openweathermap.org/data/2.5/weather?" +
+                    "lat=" + lat + "&lon=" + lon + "&appid=a3a5be223dc24b42d501dfddc0229cd0");
+
+            HttpURLConnection coon = (HttpURLConnection) url1.openConnection();
+
+            coon.setRequestMethod("GET");
+
+            InputStreamReader iisr = new InputStreamReader(coon.getInputStream());
+
+            BufferedReader brr = new BufferedReader(iisr);
+
+            ss = brr.readLine();
+
+
+
+            JSONParser par1 = new JSONParser();
+
+           JSONObject obj1 = (JSONObject) par1.parse(ss);
+            JSONObject obj2 = (JSONObject) obj1.get("main");
+
+
+
+           jl3.setText(city + ": Today current Weather Report:-");
+            jl4.setText("temp in kelvin:" + obj2.get("temp") + "K");
+            tc = (double) (obj2.get("temp"));
+            jl5.setText("temp in celsius:" + (tc - 273.15) + "°C");
+           jl6.setText("humidity:" + obj2.get("humidity") + "%");
+        }
+        catch (Exception a)
+        {
+            System.out.println(a);
+        }
+
+    }
+});
+
+
+
+
+
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+
+    }
+}
