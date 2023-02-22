@@ -1,0 +1,64 @@
+package Gui;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class SwichWithBulb {
+
+    static  JFrame fr1 = new JFrame("clint");
+    static JLabel jl = new JLabel("");
+
+
+
+    public static void main(String[] args) {
+        JFrame fr = new JFrame("server");
+        fr.setSize(200,200);
+        fr.setLayout(null);
+
+        fr.getContentPane().setBackground(Color.lightGray);
+
+        JButton bt = new JButton("OFF");
+        bt.setBounds(50,50,100,50);
+        fr.add(bt);
+        fr1.setLayout(null);
+
+
+        jl.setIcon(new ImageIcon("C:\\Users\\admin\\Downloads\\" +
+                "light-bulb-on-off-png-115539402943y50vxr5yi.png"));
+
+        bt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+if(bt.getText()=="OFF")
+{
+    bt.setText("ON");
+    jl.setIcon(new ImageIcon("C:\\Users\\admin\\Downloads\\light-bulb-on-off-png-11553940319kdxsp3rf0i.png"));
+
+
+
+}
+else
+{
+    bt.setText("OFF");
+    jl.setIcon(new ImageIcon("C:\\Users\\admin\\Downloads\\light-bulb-on-off-png-115539402943y50vxr5yi.png"));
+
+}
+
+
+            }
+        });
+        fr1.setSize(900,900);
+        jl.setBounds(0,0,840,859);
+        fr1.add(jl);
+        fr.setVisible(true);
+
+
+
+        fr1.setVisible(true);
+
+    }
+
+}
